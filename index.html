@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rubber Testing Intelligence — Submit Your Requirements</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060D1A;
+  --bg2:#0A1525;
+  --card:#0D1B2E;
+  --card2:#102236;
+  --border:#1E3A5F;
+  --border2:#2D5A8F;
+  --cyan:#00C2FF;
+  --cyan-dim:rgba(0,194,255,0.12);
+  --cyan-glow:0 0 24px rgba(0,194,255,0.25);
+  --orange:#FF6B35;
+  --orange-dim:rgba(255,107,53,0.12);
+  --orange-glow:0 0 24px rgba(255,107,53,0.2);
+  --green:#00E676;
+  --amber:#FFB300;
+  --red:#FF3D57;
+  --text:#E8F4FD;
+  --muted:#7BA7C9;
+  --subtle:#3A6080;
+  --shadow:0 4px 32px rgba(0,0,0,0.6);
+  --shadow-card:0 2px 16px rgba(0,0,0,0.4);
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:14px;line-height:1.6;
+  background-image:radial-gradient(ellipse at 20% 0%, rgba(0,194,255,0.04) 0%, transparent 60%),
+                   radial-gradient(ellipse at 80% 100%, rgba(255,107,53,0.04) 0%, transparent 60%);
+}
+
+/* ── NAV ────────────────────────────────────────────────── */
+#topNav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(6,13,26,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;height:60px;padding:0 28px;gap:20px;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-logo{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,var(--cyan),#0088CC);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;box-shadow:var(--cyan-glow);
+}
+.brand-logo i{width:18px;height:18px;color:#fff}
+.brand-name{font-size:.95rem;font-weight:800;color:var(--text);white-space:nowrap}
+.brand-dot{color:var(--cyan)}
+.brand-sub{font-size:.68rem;color:var(--muted);white-space:nowrap;line-height:1.1;margin-top:1px}
+.nav-tabs{display:flex;gap:4px;flex:1;justify-content:center}
+.tab-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 18px;border-radius:8px;border:none;cursor:pointer;
+  background:transparent;color:var(--muted);font-size:.83rem;font-weight:600;
+  font-family:inherit;transition:all .2s ease;letter-spacing:.01em;
+}
+.tab-btn i{width:15px;height:15px}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.tab-btn.active{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(0,194,255,.25)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.badge-demo{
+  padding:3px 10px;border-radius:20px;
+  background:rgba(255,107,53,.12);color:var(--orange);
+  font-size:.68rem;font-weight:700;letter-spacing:.08em;
+  border:1px solid rgba(255,107,53,.3);
+}
+
+/* ── HERO BAR ───────────────────────────────────────────── */
+.hero-bar{
+  display:flex;align-items:stretch;gap:0;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.hero-stat{
+  flex:1;min-width:160px;
+  padding:18px 24px;
+  display:flex;flex-direction:column;gap:3px;
+  border-right:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.hero-stat:last-child{border-right:none}
+.hero-stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.hero-stat:hover::before{opacity:1}
+.hero-stat-num{font-size:1.5rem;font-weight:900;color:var(--cyan);line-height:1}
+.hero-stat-num.orange{color:var(--orange)}
+.hero-stat-label{font-size:.72rem;color:var(--muted);font-weight:500}
+.hero-stat-sub{font-size:.65rem;color:var(--subtle);font-family:'JetBrains Mono',monospace}
+
+/* ── MAIN ───────────────────────────────────────────────── */
+.main-content{max-width:1400px;margin:0 auto;padding:32px 28px;min-height:calc(100vh - 60px)}
+.app-section{display:none}
+.app-section.active{display:block}
+
+/* ── FINDER SECTION ─────────────────────────────────────── */
+.finder-intro{
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+  margin-bottom:32px;padding:28px 32px;
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  border-left:4px solid var(--cyan);
+  box-shadow:var(--shadow-card);
+  position:relative;overflow:hidden;
+}
+.finder-intro::after{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,194,255,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.finder-intro-text h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.finder-intro-text h2 span{color:var(--cyan)}
+.finder-intro-text p{color:var(--muted);font-size:.88rem;max-width:500px}
+.finder-intro-pills{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.finder-pill{
+  padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600;
+  border:1px solid var(--border2);color:var(--muted);
+  display:flex;align-items:center;gap:5px;
+}
+.finder-pill i{width:12px;height:12px}
+
+/* Step indicator */
+.step-track{display:flex;align-items:center;gap:0;margin-bottom:28px;padding:0 4px}
+.step-node{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  position:relative;z-index:1;
+}
+.step-circle{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.9rem;
+  background:var(--card);border:2px solid var(--border);
+  color:var(--muted);transition:all .3s ease;
+}
+.step-circle.active{
+  background:var(--cyan);border-color:var(--cyan);color:var(--bg);
+  box-shadow:0 0 20px rgba(0,194,255,.4);
+}
+.step-circle.done{
+  background:var(--green);border-color:var(--green);color:var(--bg);
+}
+.step-label{font-size:.7rem;color:var(--muted);font-weight:600;white-space:nowrap;transition:color .3s}
+.step-label.active{color:var(--cyan)}
+.step-label.done{color:var(--green)}
+.step-connector{
+  flex:1;height:2px;background:var(--border);margin:0 8px;
+  margin-bottom:22px;transition:background .3s;
+}
+.step-connector.done{background:var(--cyan)}
+
+/* Step cards */
+.step-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:24px;margin-bottom:16px;box-shadow:var(--shadow-card);
+  animation:cardIn .25s ease;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.step-heading{
+  font-size:.85rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.step-heading i{width:15px;height:15px;color:var(--cyan)}
+
+/* Material grid */
+.material-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mat-btn{
+  padding:14px 12px;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  cursor:pointer;transition:all .2s ease;
+  text-align:left;font-family:inherit;color:var(--text);
+  display:flex;flex-direction:column;gap:6px;
+  position:relative;
+}
+.mat-btn:hover{border-color:var(--cyan);background:var(--cyan-dim);transform:translateY(-2px)}
+.mat-btn.selected{border-color:var(--cyan);background:var(--cyan-dim);box-shadow:var(--cyan-glow)}
+.mat-btn i{width:20px;height:20px;color:var(--cyan)}
+.mat-label{font-size:.82rem;font-weight:700}
+.mat-check{
+  position:absolute;top:8px;right:8px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--cyan);color:var(--bg);
+  display:none;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:900;
+}
+.mat-btn.selected .mat-check{display:flex}
+
+/* Test type grid */
+.test-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.test-btn{
+  padding:16px 10px;border-radius:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,.02);
+  cursor:pointer;transition:all .25s ease;
+  text-align:center;font-family:inherit;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.test-btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-card)}
+.test-btn.selected{transform:translateY(-3px)}
+.test-btn i{width:22px;height:22px}
+.test-label{font-size:.78rem;font-weight:700}
+.test-count{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* Results header */
+.results-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.results-title{font-size:1.1rem;font-weight:800}
+.results-title span{color:var(--cyan)}
+.turnaround-info{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 14px;border-radius:8px;
+  background:var(--cyan-dim);border:1px solid rgba(0,194,255,.2);
+  font-size:.78rem;color:var(--cyan);font-weight:600;
+}
+.turnaround-info i{width:14px;height:14px}
+.results-grid{display:flex;flex-direction:column;gap:12px}
+.finder-bottom{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+
+/* No services */
+.no-match{
+  padding:28px;text-align:center;
+  border:1px dashed var(--border2);border-radius:12px;
+}
+.no-match strong{display:block;font-size:.95rem;margin-bottom:6px;color:var(--text)}
+.no-match p{color:var(--muted);font-size:.83rem}
+
+/* ── SERVICE CARD ────────────────────────────────────────── */
+.svc-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;box-shadow:var(--shadow-card);
+  transition:all .2s ease;overflow:hidden;
+}
+.svc-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--cyan);
+  box-shadow:0 8px 32px rgba(0,0,0,.5),var(--cyan-glow);
+}
+.svc-card-top{
+  padding:14px 16px 10px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+}
+.svc-card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cat-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:6px;font-size:.7rem;font-weight:700;
+  letter-spacing:.04em;
+}
+.svc-id{
+  padding:2px 8px;border-radius:5px;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;
+  background:rgba(123,167,201,.1);color:var(--muted);border:1px solid var(--border2);
+}
+.oe-badge{
+  padding:2px 8px;border-radius:5px;font-size:.65rem;font-weight:800;
+  letter-spacing:.06em;
+}
+.oe-badge.blocker{background:rgba(255,61,87,.12);color:var(--red);border:1px solid rgba(255,61,87,.3)}
+.oe-badge.req{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.express-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:5px;font-size:.67rem;font-weight:700;
+  background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25);
+  flex-shrink:0;
+}
+.express-badge i{width:11px;height:11px}
+.std-badge{
+  padding:3px 8px;border-radius:5px;font-size:.67rem;font-weight:600;
+  background:rgba(123,167,201,.08);color:var(--muted);border:1px solid var(--border);
+  flex-shrink:0;
+}
+.svc-name{padding:0 16px 6px;font-size:.98rem;font-weight:800;color:var(--text)}
+.svc-desc{padding:0 16px 10px;font-size:.8rem;color:var(--muted);line-height:1.55}
+.svc-standards{padding:0 16px 8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.std-label{font-size:.72rem;color:var(--subtle);font-weight:600;flex-shrink:0}
+.std-chip{
+  padding:2px 8px;border-radius:5px;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--amber);background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.2);
+}
+.svc-equip{
+  padding:0 16px 12px;display:flex;align-items:center;gap:6px;
+}
+.equip-label{font-size:.7rem;color:var(--subtle);font-weight:600;flex-shrink:0}
+.equip-val{
+  font-size:.7rem;font-family:'JetBrains Mono',monospace;
+  color:var(--cyan);background:var(--cyan-dim);
+  padding:2px 8px;border-radius:5px;border:1px solid rgba(0,194,255,.15);
+}
+.svc-expand-btn{
+  padding:0 16px 12px;display:flex;align-items:center;gap:5px;
+  background:none;border:none;cursor:pointer;
+  color:var(--cyan);font-size:.78rem;font-weight:600;font-family:inherit;
+  transition:color .2s;
+}
+.svc-expand-btn:hover{color:#00e0ff}
+.svc-expand-btn i{width:14px;height:14px;transition:transform .2s}
+.svc-expand-btn.open i{transform:rotate(180deg)}
+.svc-details{
+  padding:0 16px 16px;border-top:1px solid var(--border);
+  display:none;animation:cardIn .2s ease;
+}
+.svc-details.open{display:block}
+.detail-block{margin-top:14px}
+.detail-label{
+  font-size:.68rem;color:var(--subtle);font-weight:700;
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;
+}
+.detail-text{font-size:.81rem;color:var(--text);line-height:1.55}
+.detail-italic{font-style:italic;color:var(--muted)}
+.mat-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.mat-chip-sm{
+  padding:2px 8px;border-radius:4px;font-size:.68rem;font-weight:600;
+  background:rgba(45,90,143,.2);color:var(--muted);border:1px solid var(--border2);
+}
+.svc-footer{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+}
+.ta-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:6px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;
+}
+.ta-badge i{width:12px;height:12px}
+
+/* ── BUTTONS ────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;border-radius:9px;border:none;cursor:pointer;
+  font-family:inherit;font-size:.84rem;font-weight:700;
+  transition:all .2s ease;letter-spacing:.01em;
+}
+.btn-cyan{background:linear-gradient(135deg,var(--cyan),#0088CC);color:#000;box-shadow:0 4px 16px rgba(0,194,255,.25)}
+.btn-cyan:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,194,255,.4)}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#CC4A1A);color:#fff;box-shadow:0 4px 16px rgba(255,107,53,.2)}
+.btn-orange:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(255,107,53,.35)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2);background:rgba(255,255,255,.04)}
+.btn-sm{padding:7px 14px;font-size:.78rem}
+.btn i{width:15px;height:15px}
+.btn-sm i{width:13px;height:13px}
+.btn-icon{
+  padding:8px;border-radius:8px;background:transparent;
+  border:1px solid var(--border);color:var(--muted);cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.btn-icon:hover{color:var(--text);border-color:var(--cyan)}
+.btn-icon i{width:16px;height:16px}
+
+/* ── CATALOG ────────────────────────────────────────────── */
+.catalog-header{
+  position:sticky;top:60px;z-index:10;
+  background:rgba(6,13,26,.95);backdrop-filter:blur(8px);
+  padding:16px 0 12px;margin-bottom:20px;
+  border-bottom:1px solid var(--border);
+}
+.catalog-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.catalog-title{font-size:.95rem;font-weight:800;color:var(--text)}
+.search-wrap{position:relative;flex:1;max-width:300px}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted);pointer-events:none}
+#catalogSearch{
+  width:100%;padding:8px 12px 8px 32px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:inherit;font-size:.83rem;
+  outline:none;transition:border-color .2s;
+}
+#catalogSearch:focus{border-color:var(--cyan)}
+#catalogSearch::placeholder{color:var(--muted)}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
+.fpill{
+  padding:5px 14px;border-radius:20px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);cursor:pointer;font-family:inherit;
+  font-size:.76rem;font-weight:600;transition:all .2s;
+}
+.fpill:hover{border-color:var(--cyan);color:var(--text)}
+.fpill.active{background:var(--cyan-dim);border-color:rgba(0,194,255,.35);color:var(--cyan)}
+.catalog-count{font-size:.77rem;color:var(--muted);margin-top:6px}
+.catalog-count strong{color:var(--cyan)}
+
+.catalog-layout{display:grid;grid-template-columns:1fr 200px;gap:20px;align-items:start}
+.catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{
+  padding:16px 14px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);
+  text-align:center;transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--border2)}
+.stat-n{font-size:1.6rem;font-weight:900;line-height:1}
+.stat-n.cyan{color:var(--cyan)}
+.stat-n.orange{color:var(--orange)}
+.stat-l{font-size:.72rem;color:var(--muted);margin-top:3px}
+
+.donut-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:16px;text-align:center;
+  position:sticky;top:140px;
+}
+.donut-title{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+#donutLegend{margin-top:12px;display:flex;flex-direction:column;gap:5px;text-align:left}
+.legend-row{
+  display:flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:.72rem;color:var(--muted);padding:3px 4px;border-radius:5px;
+  transition:background .15s;
+}
+.legend-row:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+.empty-state{
+  grid-column:1/-1;text-align:center;padding:48px 24px;color:var(--muted);
+}
+.empty-state strong{display:block;font-size:.92rem;color:var(--text);margin-bottom:6px}
+
+.catalog-cta{
+  margin-top:24px;padding:28px 24px;text-align:center;
+  border:1px dashed var(--border2);border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,107,53,.04),transparent);
+}
+.catalog-cta h3{font-size:1.05rem;font-weight:800;margin-bottom:6px}
+.catalog-cta h3 span{color:var(--orange)}
+.catalog-cta p{color:var(--muted);font-size:.84rem;margin-bottom:16px;max-width:440px;margin-left:auto;margin-right:auto}
+
+/* ── MODAL ──────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.7);
+  width:100%;max-width:560px;max-height:90vh;overflow-y:auto;
+  animation:modalPop .22s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalPop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-head{
+  padding:24px 24px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+}
+.modal-head-icon{
+  width:42px;height:42px;border-radius:10px;flex-shrink:0;
+  background:var(--orange-dim);border:1px solid rgba(255,107,53,.3);
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-head-icon i{width:20px;height:20px;color:var(--orange)}
+.modal-title{font-size:1.05rem;font-weight:800;margin-bottom:3px}
+.modal-sub{font-size:.8rem;color:var(--muted)}
+.modal-body{padding:20px 24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+.flabel{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.flabel span{color:var(--red);margin-left:2px}
+.finput,.fselect,.ftextarea{
+  padding:9px 12px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:inherit;font-size:.84rem;
+  outline:none;transition:border-color .2s;width:100%;
+}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--cyan)}
+.finput::placeholder,.ftextarea::placeholder{color:var(--subtle)}
+.finput.err,.fselect.err,.ftextarea.err{border-color:var(--red)}
+.fselect{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237BA7C9' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;
+}
+.fselect option{background:#0D1B2E;color:var(--text)}
+.ftextarea{resize:vertical;min-height:76px}
+.modal-foot{padding:0 24px 22px;display:flex;align-items:center;gap:10px}
+.form-msg{
+  padding:11px 14px;border-radius:8px;font-size:.83rem;font-weight:500;
+  display:none;align-items:center;gap:8px;margin:0 24px 14px;
+}
+.form-msg.ok{display:flex;background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.25);color:var(--green)}
+.form-msg.fail{display:flex;background:rgba(255,61,87,.08);border:1px solid rgba(255,61,87,.25);color:var(--red)}
+.form-msg i{width:16px;height:16px;flex-shrink:0}
+
+/* ── CHATBOT WIDGET ─────────────────────────────────────── */
+#chatTrigger{
+  position:fixed;bottom:24px;right:24px;z-index:350;
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--cyan),#0066AA);
+  box-shadow:0 4px 24px rgba(0,194,255,.45);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,box-shadow .2s;
+}
+#chatTrigger:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(0,194,255,.6)}
+#chatTrigger i{width:24px;height:24px;color:#fff;transition:opacity .2s}
+#chatTrigger .close-icon{display:none}
+#chatTrigger.open .chat-icon{display:none}
+#chatTrigger.open .close-icon{display:block}
+.chat-pulse{
+  position:fixed;bottom:24px;right:24px;z-index:349;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--cyan);opacity:.25;
+  animation:chatPulse 2.5s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes chatPulse{
+  0%{transform:scale(1);opacity:.25}
+  70%{transform:scale(1.6);opacity:0}
+  100%{transform:scale(1.6);opacity:0}
+}
+.chat-notif{
+  position:fixed;bottom:62px;right:20px;z-index:351;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--red);border:2px solid var(--bg);
+  display:none;align-items:center;justify-content:center;
+  font-size:.6rem;font-weight:800;color:#fff;
+}
+.chat-notif.show{display:flex}
+
+#chatPanel{
+  position:fixed;bottom:92px;right:24px;z-index:350;
+  width:360px;height:530px;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.7);
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:scale(0) translateY(20px);transform-origin:bottom right;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s;
+  opacity:0;pointer-events:none;
+}
+#chatPanel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+
+.chat-head{
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  background:linear-gradient(90deg,rgba(0,194,255,.06),transparent);
+}
+.chat-avatar{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--cyan),#0088CC);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 12px rgba(0,194,255,.3);
+}
+.chat-avatar i{width:18px;height:18px;color:#fff}
+.chat-name{font-size:.86rem;font-weight:800;color:var(--text)}
+.chat-status{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted)}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.chat-ctx{
+  padding:3px 9px;border-radius:5px;
+  background:var(--cyan-dim);color:var(--cyan);
+  font-size:.67rem;font-weight:600;border:1px solid rgba(0,194,255,.2);
+  white-space:nowrap;max-width:92px;overflow:hidden;text-overflow:ellipsis;
+}
+.chat-reset{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.chat-reset:hover{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-dim)}
+.chat-reset i{width:14px;height:14px}
+
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 14px 0;display:flex;flex-direction:column;gap:9px}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-track{background:transparent}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.cmsg{display:flex;flex-direction:column;max-width:87%}
+.cmsg.bot{align-self:flex-start}
+.cmsg.user{align-self:flex-end;align-items:flex-end}
+.cbubble{
+  padding:9px 12px;border-radius:12px;font-size:.81rem;line-height:1.55;
+}
+.cmsg.bot .cbubble{
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  color:var(--text);border-radius:4px 12px 12px 12px;
+}
+.cmsg.user .cbubble{
+  background:linear-gradient(135deg,var(--cyan),#0088CC);
+  color:#000;font-weight:500;border-radius:12px 4px 12px 12px;
+}
+.ctime{font-size:.63rem;color:var(--subtle);margin-top:3px;padding:0 2px}
+
+.typing-dots{
+  display:none;align-self:flex-start;
+  padding:10px 14px;background:rgba(255,255,255,.05);
+  border:1px solid var(--border);border-radius:4px 12px 12px 12px;
+  gap:4px;align-items:center;
+}
+.typing-dots.show{display:flex}
+.td{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:tdBounce 1.2s infinite}
+.td:nth-child(2){animation-delay:.2s}
+.td:nth-child(3){animation-delay:.4s}
+@keyframes tdBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+.chat-qp{
+  padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;
+  border-top:1px solid var(--border);flex-shrink:0;
+  background:rgba(0,0,0,.2);
+}
+.qp{
+  padding:5px 10px;border-radius:20px;
+  background:rgba(0,194,255,.08);border:1px solid rgba(0,194,255,.2);
+  color:var(--cyan);font-size:.7rem;cursor:pointer;font-family:inherit;
+  transition:all .15s;
+}
+.qp:hover{background:rgba(0,194,255,.15)}
+
+.chat-input-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+#chatInput{
+  flex:1;padding:8px 11px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:inherit;font-size:.8rem;
+  outline:none;resize:none;min-height:36px;max-height:90px;
+  transition:border-color .2s;line-height:1.4;
+}
+#chatInput:focus{border-color:var(--cyan)}
+#chatInput::placeholder{color:var(--subtle)}
+.chat-err{
+  margin:0 12px 8px;padding:8px 12px;border-radius:7px;
+  background:rgba(255,179,0,.07);border:1px solid rgba(255,179,0,.2);
+  color:var(--amber);font-size:.77rem;display:none;
+}
+.chat-err.show{display:block}
+
+/* ── MISC ───────────────────────────────────────────────── */
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:1100px){
+  .catalog-grid{grid-template-columns:repeat(2,1fr)}
+  .catalog-layout{grid-template-columns:1fr}
+  .donut-box{display:none}
+}
+@media(max-width:860px){
+  .material-grid{grid-template-columns:repeat(3,1fr)}
+  .test-grid{grid-template-columns:repeat(3,1fr)}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .hero-bar{display:grid;grid-template-columns:1fr 1fr}
+  .hero-stat{border-right:none;border-bottom:1px solid var(--border)}
+}
+@media(max-width:600px){
+  .main-content{padding:20px 16px}
+  .material-grid{grid-template-columns:repeat(2,1fr)}
+  .test-grid{grid-template-columns:repeat(2,1fr)}
+  .catalog-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  #chatPanel{width:calc(100vw - 32px);right:16px;bottom:88px}
+  .finder-intro{grid-template-columns:1fr}
+  .step-label{display:none}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .hero-bar{grid-template-columns:1fr}
+  .tab-btn span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════════════════════════ -->
+<header id="topNav">
+  <div class="nav-brand">
+    <div class="brand-logo"><i data-lucide="flask-conical"></i></div>
+    <div>
+      <div class="brand-name">RubberSpec<span class="brand-dot">.</span>Tech</div>
+      <div class="brand-sub">by Oussama Labs</div>
+    </div>
+  </div>
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchSection('finder')" id="tab-finder">
+      <i data-lucide="search"></i><span>Service Finder</span>
+    </button>
+    <button class="tab-btn" onclick="switchSection('catalog')" id="tab-catalog">
+      <i data-lucide="layout-grid"></i><span>Full Catalog</span>
+    </button>
+  </nav>
+  <div class="nav-right">
+    <span class="badge-demo">DEMO</span>
+  </div>
+</header>
+
+<!-- ═══════════════ HERO BAR ══════════════════════════════ -->
+<div class="hero-bar">
+  <div class="hero-stat">
+    <div class="hero-stat-num">24</div>
+    <div class="hero-stat-label">Testing Services</div>
+    <div class="hero-stat-sub">5 categories</div>
+  </div>
+  <div class="hero-stat">
+    <div class="hero-stat-num orange">20/22</div>
+    <div class="hero-stat-label">OE Requirements Covered</div>
+    <div class="hero-stat-sub">ISO/IEC 17025:2017</div>
+  </div>
+  <div class="hero-stat">
+    <div class="hero-stat-num">LAT100</div>
+    <div class="hero-stat-label">Wet Grip & Friction</div>
+    <div class="hero-stat-sub">VMI · same as tier-1 OEMs</div>
+  </div>
+  <div class="hero-stat">
+    <div class="hero-stat-num">2–3</div>
+    <div class="hero-stat-label">Days Express Turnaround</div>
+    <div class="hero-stat-sub">standard: 5–7 days</div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN CONTENT ══════════════════════════ -->
+<div class="main-content">
+
+  <!-- ── FINDER SECTION ─────────────────────────────────── -->
+  <section id="section-finder" class="app-section active">
+    <div class="finder-intro">
+      <div class="finder-intro-text">
+        <h2>Find the <span>right test</span> for your compound</h2>
+        <p>Select your rubber type and testing objective — we return matching services with turnaround times, sample requirements, and applicable standards instantly.</p>
+        <div class="finder-intro-pills">
+          <span class="finder-pill"><i data-lucide="award"></i>ISO/IEC 17025 Accredited</span>
+          <span class="finder-pill"><i data-lucide="zap"></i>Express 2–3 days</span>
+          <span class="finder-pill"><i data-lucide="shield-check"></i>OE Qualification Ready</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <button class="btn btn-orange" onclick="openModal()">
+          <i data-lucide="send"></i>Submit Requirements
+        </button>
+      </div>
+    </div>
+
+    <!-- Step tracker -->
+    <div class="step-track" id="stepTrack">
+      <div class="step-node">
+        <div class="step-circle active" id="sc1">1</div>
+        <div class="step-label active" id="sl1">Material</div>
+      </div>
+      <div class="step-connector" id="conn1"></div>
+      <div class="step-node">
+        <div class="step-circle" id="sc2">2</div>
+        <div class="step-label" id="sl2">Test Type</div>
+      </div>
+      <div class="step-connector" id="conn2"></div>
+      <div class="step-node">
+        <div class="step-circle" id="sc3">3</div>
+        <div class="step-label" id="sl3">Results</div>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card" id="step1">
+      <div class="step-heading"><i data-lucide="layers"></i>What material are you testing?</div>
+      <div class="material-grid" id="matGrid"></div>
+    </div>
+
+    <!-- Step 2 (hidden) -->
+    <div class="step-card" id="step2" style="display:none">
+      <div class="step-heading"><i data-lucide="microscope"></i>What do you need to measure?</div>
+      <div class="test-grid" id="testGrid"></div>
+    </div>
+
+    <!-- Step 3 (hidden) -->
+    <div class="step-card" id="step3" style="display:none">
+      <div class="results-header">
+        <div>
+          <div class="results-title" id="resultsTitle"><span id="resultsCount">0</span> services match your requirements</div>
+        </div>
+        <div class="turnaround-info" id="taInfo">
+          <i data-lucide="clock"></i>
+          <span id="taText">Standard: 5–7 days</span>
+        </div>
+      </div>
+      <div class="results-grid" id="resultsGrid"></div>
+      <div class="finder-bottom">
+        <button class="btn btn-orange" onclick="openModal()">
+          <i data-lucide="send"></i>Submit Testing Requirements
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="resetFinder()">
+          <i data-lucide="rotate-ccw"></i>Start over
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CATALOG SECTION ────────────────────────────────── -->
+  <section id="section-catalog" class="app-section">
+    <div class="catalog-header">
+      <div class="catalog-top">
+        <div class="catalog-title">All Testing Services — 24 Capabilities</div>
+        <div class="search-wrap">
+          <i data-lucide="search"></i>
+          <input type="text" id="catalogSearch" placeholder="Search by service or standard…" oninput="filterCatalog()">
+        </div>
+      </div>
+      <div class="filter-pills" id="filterPills"></div>
+      <div class="catalog-count">Showing <strong id="catCount">24</strong> of 24 services</div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-n cyan">24</div><div class="stat-l">Total Services</div></div>
+      <div class="stat-card"><div class="stat-n orange">20/22</div><div class="stat-l">OE Requirements</div></div>
+      <div class="stat-card"><div class="stat-n cyan">40+</div><div class="stat-l">Standards Covered</div></div>
+      <div class="stat-card"><div class="stat-n" style="color:var(--green);font-size:1rem;padding-top:5px">17025</div><div class="stat-l">ISO/IEC Accredited</div></div>
+    </div>
+
+    <div class="catalog-layout">
+      <div>
+        <div class="catalog-grid" id="catalogGrid"></div>
+        <div class="catalog-cta">
+          <h3>Don't see what you need? <span>We scope custom programs.</span></h3>
+          <p>Submit your compound type, target specification, and timeline — we'll respond with a tailored testing scope within 1 business day.</p>
+          <button class="btn btn-orange" onclick="openModal()">
+            <i data-lucide="send"></i>Submit Your Requirements
+          </button>
+        </div>
+      </div>
+      <div class="donut-box">
+        <div class="donut-title">Services by Category</div>
+        <canvas id="donutChart" width="168" height="168"></canvas>
+        <div id="donutLegend"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ FLOATING CHATBOT ══════════════════════ -->
+<div class="chat-pulse" id="chatPulse"></div>
+<button id="chatTrigger" onclick="toggleChat()" title="Ask our technical advisor">
+  <i data-lucide="bot" class="chat-icon"></i>
+  <i data-lucide="x" class="close-icon"></i>
+</button>
+<div class="chat-notif" id="chatNotif">1</div>
+
+<div id="chatPanel">
+  <div class="chat-head">
+    <div class="chat-avatar"><i data-lucide="bot"></i></div>
+    <div style="flex:1;min-width:0">
+      <div class="chat-name">Technical Advisor</div>
+      <div class="chat-status"><span class="online-dot"></span>Online — ask anything</div>
+    </div>
+    <button class="chat-reset" onclick="resetConversation()" title="Reset conversation"><i data-lucide="rotate-ccw"></i></button>
+    <span class="chat-ctx" id="chatCtx">Finder</span>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="typing-dots" id="typingDots">
+      <span class="td"></span><span class="td"></span><span class="td"></span>
+    </div>
+  </div>
+  <div class="chat-err" id="chatErr">Connection error — please try again.</div>
+  <div class="chat-input-row">
+    <textarea id="chatInput" placeholder="Ask about standards, equipment, turnaround…" rows="1" onkeydown="handleChatKey(event)"></textarea>
+    <button class="btn btn-cyan btn-sm" onclick="sendChat()"><i data-lucide="send"></i></button>
+  </div>
+</div>
+
+<!-- ═══════════════ INQUIRY MODAL ══════════════════════════ -->
+<div class="modal-overlay" id="inquiryModal" onclick="handleOverlayClick(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-head">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div class="modal-head-icon"><i data-lucide="file-text"></i></div>
+        <div>
+          <div class="modal-title">Submit Your Testing Requirements</div>
+          <div class="modal-sub">We respond within 1 business day with a formal testing scope and quotation.</div>
+        </div>
+      </div>
+      <button class="btn-icon" onclick="closeModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div id="formMsg" class="form-msg"></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="fg"><label class="flabel">Full Name <span>*</span></label><input class="finput" id="f-name" placeholder="John Smith"></div>
+        <div class="fg"><label class="flabel">Company <span>*</span></label><input class="finput" id="f-company" placeholder="Acme Tyre Co."></div>
+        <div class="fg"><label class="flabel">Email <span>*</span></label><input type="email" class="finput" id="f-email" placeholder="you@company.com"></div>
+        <div class="fg"><label class="flabel">Phone (optional)</label><input type="tel" class="finput" id="f-phone" placeholder="+1 555 000 0000"></div>
+        <div class="fg"><label class="flabel">Material Type <span>*</span></label>
+          <select class="fselect" id="f-material">
+            <option value="">Select material…</option>
+            <option>Natural Rubber (NR)</option>
+            <option>Styrene-Butadiene Rubber (SBR)</option>
+            <option>Polybutadiene Rubber (BR)</option>
+            <option>EPDM Rubber</option>
+            <option>Nitrile Rubber (NBR)</option>
+            <option>Rubber Compound / Blend</option>
+            <option>Thermoplastic Elastomer (TPE)</option>
+            <option>Silicone Rubber</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flabel">Standard / Specification</label><input class="finput" id="f-standard" placeholder="e.g. ASTM D412, ISO 37"></div>
+        <div class="fg full"><label class="flabel">Testing Requirements <span>*</span></label><textarea class="ftextarea" id="f-services" placeholder="Describe what you need to test — compound type, target spec, application context…" rows="3"></textarea></div>
+        <div class="fg"><label class="flabel">Sample Quantity <span>*</span></label>
+          <select class="fselect" id="f-qty">
+            <option value="">Select…</option>
+            <option>1–5 samples</option>
+            <option>6–20 samples</option>
+            <option>21–100 samples</option>
+            <option>100+ samples</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flabel">Turnaround Needed <span>*</span></label>
+          <select class="fselect" id="f-turnaround">
+            <option value="">Select…</option>
+            <option>Standard (5–7 days)</option>
+            <option>Express (2–3 days, +35%)</option>
+            <option>Flexible</option>
+          </select>
+        </div>
+        <div class="fg full"><label class="flabel">Additional Context (optional)</label><textarea class="ftextarea" id="f-notes" placeholder="OE program, target OEM, urgency, any special conditions…" rows="2"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-orange" style="flex:1;justify-content:center" onclick="submitInquiry()" id="submitBtn">
+        <i data-lucide="send"></i>Submit Requirements
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ JAVASCRIPT ══════════════════════════════ -->
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//  N8N CONNECTION — set your n8n base URL ONCE below. Nothing else to touch.
+//  The webhook paths (services-chatbot / services-inquiry) already match the
+//  two imported workflows, so the production URLs wire up automatically.
+//  Example base:  https://yourname.app.n8n.cloud   (NO trailing slash)
+// ════════════════════════════════════════════════════════════════════════
+const N8N_BASE_URL    = "https://oussama19.app.n8n.cloud";
+const N8N_CHATBOT_URL = `${N8N_BASE_URL}/webhook/services-chatbot`;
+const N8N_INQUIRY_URL = `${N8N_BASE_URL}/webhook/services-inquiry`;
+
+// ── DATA ──────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  {id:"MECH",  label:"Mechanical",         color:"#3B82F6", icon:"gauge"},
+  {id:"CURE",  label:"Cure & Rheology",    color:"#F97316", icon:"thermometer"},
+  {id:"AGING", label:"Aging & Environment",color:"#EF4444", icon:"clock"},
+  {id:"CHEM",  label:"Chemical Analysis",  color:"#A855F7", icon:"flask-conical"},
+  {id:"DYN",   label:"Dynamic & Visco",    color:"#14B8A6", icon:"activity"},
+];
+
+const MATERIAL_TYPES = [
+  {id:"NR",   label:"Natural Rubber",              desc:"NR",   icon:"leaf"},
+  {id:"SBR",  label:"Styrene-Butadiene (SBR)",     desc:"SBR",  icon:"circle-dot"},
+  {id:"BR",   label:"Polybutadiene (BR)",           desc:"BR",   icon:"hexagon"},
+  {id:"EPDM", label:"EPDM Rubber",                  desc:"EPDM", icon:"layers"},
+  {id:"NBR",  label:"Nitrile Rubber (NBR)",         desc:"NBR",  icon:"droplets"},
+  {id:"COMP", label:"Rubber Compound / Blend",      desc:"COMP", icon:"beaker"},
+  {id:"TPE",  label:"Thermoplastic Elastomer",      desc:"TPE",  icon:"zap"},
+  {id:"SIL",  label:"Silicone Rubber",              desc:"SIL",  icon:"sparkles"},
+];
+
+const TEST_TYPES = [
+  {id:"mechanical", label:"Mechanical",    icon:"gauge",         color:"#3B82F6"},
+  {id:"cure",       label:"Cure & Rheology",icon:"thermometer",  color:"#F97316"},
+  {id:"aging",      label:"Aging & Env",   icon:"clock",         color:"#EF4444"},
+  {id:"chemical",   label:"Chemical",      icon:"flask-conical", color:"#A855F7"},
+  {id:"dynamic",    label:"Dynamic",       icon:"activity",      color:"#14B8A6"},
+];
+
+// Equipment instruments mapped from your lab's actual platform
+const EQUIPMENT = {
+  "M01":"Zwick Z10 · Tensor Check",
+  "M02":"HT 3000 · Auto Hardness Shore A",
+  "M03":"Zwick Z10",
+  "M04":"Zwick Z10",
+  "M05":"ABR 3000",
+  "M06":"Schob pendulum · Resilience tester",
+  "M07":"FT 3000 De Mattia · Flexon Check",
+  "C01":"MDR 3000 · Rheocheck MD",
+  "C02":"MV 3000 · Mooneycheck Drive",
+  "C03":"Multi-TC unit (press-side)",
+  "C04":"MDR 3000 (4-temp series)",
+  "C05":"MV 3000 + MDR 3000",
+  "A01":"Air oven aging chamber",
+  "A02":"Ozone aging chamber · 200 L",
+  "A03":"Immersion baths + Zwick Z10",
+  "A04":"Low-temp brittleness bath",
+  "A05":"UV / humidity cycling chamber",
+  "CH01":"Netzsch STA 449 (TGA mode)",
+  "CH02":"ATR-FTIR spectrometer",
+  "CH03":"Muffle furnace + analytical balance",
+  "CH04":"XRF / OES spectrometer",
+  "D01":"Netzsch Gabo DMA 242",
+  "D02":"Netzsch Gabo DMA 242",
+  "D03":"D-RPA 3000 · Premier RPA",
+};
+
+// OE qualification badge (based on OE capability matrix)
+const OE_FLAG = {
+  "M01":"OE Req","M02":"OE Req","M04":"OE Req","M05":"OE Req",
+  "C01":"OE Req","C02":"OE Req",
+  "A01":"OE Req","A02":"OE Critical","A03":"OE Req",
+  "CH01":"OE Req","CH02":"OE Req",
+  "D01":"OE Req","D03":"OE Req",
+};
+
+const SERVICES = [
+  // MECHANICAL
+  {id:"M01",category:"MECH",name:"Tensile Strength & Elongation",
+   standards:["ASTM D412","ISO 37"],
+   description:"Measures ultimate tensile strength (MPa) and elongation at break (%) using dumbbell specimens at controlled crosshead speed. Five replicates reported with standard deviation.",
+   applicable_materials:["NR","SBR","BR","EPDM","NBR","COMP","TPE","SIL"],
+   sample_req:"5 × Type C or D dumbbell specimens, or 200×200×2mm sheet",
+   turnaround:"3–5 days",express:true,
+   deliverable:"Test report: mean + SD, full stress-strain curve PDF",
+   typical_use:"QC release, compound qualification, OE specification compliance"},
+  {id:"M02",category:"MECH",name:"Shore A Hardness",
+   standards:["ISO 48-4","ASTM D2240"],
+   description:"Instantaneous and 3-second hardness reading per point. 10-point average across specimen surface at 23 ± 2°C reference temperature.",
+   applicable_materials:["NR","SBR","BR","EPDM","NBR","COMP","TPE","SIL"],
+   sample_req:"Flat specimen min 6mm thick × 30mm diameter, or equivalent",
+   turnaround:"1–2 days",express:true,
+   deliverable:"Mean hardness, point-by-point map, pass/fail vs specification",
+   typical_use:"Incoming material QC, process monitoring, OE compound approval"},
+  {id:"M03",category:"MECH",name:"Tear Resistance",
+   standards:["ASTM D624","ISO 34-1"],
+   description:"Trouser, angle, and crescent tear test methods available. Five specimens per method. Reported as kN/m.",
+   applicable_materials:["NR","SBR","COMP","EPDM","NBR"],
+   sample_req:"Die-cut specimens per ASTM D624 Figs A, B, or C — 10 specimens",
+   turnaround:"3–5 days",express:true,
+   deliverable:"Mean tear strength, failure mode description, photographs",
+   typical_use:"Sidewall compound evaluation, flex component qualification"},
+  {id:"M04",category:"MECH",name:"Compression Set",
+   standards:["ASTM D395","ISO 815-1"],
+   description:"Method B (constant deflection). 25% compression at 70°C or 100°C for 22h or 70h. Reports permanent deformation percentage.",
+   applicable_materials:["NR","EPDM","NBR","SIL","COMP"],
+   sample_req:"3 × cylindrical buttons 29mm × ⌀12.5mm or disk specimens",
+   turnaround:"3–5 days (22h) / 5–7 days (70h)",express:false,
+   deliverable:"% compression set per specimen, mean, temperature-time conditions",
+   typical_use:"Sealing compound QC, gasket material OE qualification"},
+  {id:"M05",category:"MECH",name:"Abrasion Resistance (DIN)",
+   standards:["DIN 53516","ISO 4649"],
+   description:"Rotary drum abrasion. Volume loss (mm³) relative to reference compound. Standard abrader with 10N force.",
+   applicable_materials:["NR","SBR","BR","COMP"],
+   sample_req:"Cylindrical specimen 16mm × ⌀6mm or sheet for die-cutting",
+   turnaround:"3–5 days",express:true,
+   deliverable:"Volume loss mm³, relative abrasion index vs reference",
+   typical_use:"Tread compound ranking, wear performance screening"},
+  {id:"M06",category:"MECH",name:"Rebound Resilience",
+   standards:["ISO 4662","ASTM D1054"],
+   description:"Schob pendulum rebound at 23°C and 70°C. Energy return percentage — direct hysteresis indicator.",
+   applicable_materials:["NR","SBR","BR","COMP","EPDM"],
+   sample_req:"Cylindrical specimen 29mm × ⌀12.5mm",
+   turnaround:"2–3 days",express:true,
+   deliverable:"% rebound at each temperature, temperature-resilience curve",
+   typical_use:"Rolling resistance screening, compound energy characterisation"},
+  {id:"M07",category:"MECH",name:"Flex Fatigue — De Mattia",
+   standards:["ASTM D813","ISO 132"],
+   description:"Flexing to crack initiation and crack growth measurement. Reports kilocycles to specified crack length.",
+   applicable_materials:["NR","SBR","BR","COMP"],
+   sample_req:"Standard De Mattia ring specimens — 10 units",
+   turnaround:"7–14 days (test duration dependent)",express:false,
+   deliverable:"Kilocycles to crack initiation and to 2mm crack, failure mode",
+   typical_use:"Sidewall endurance, belt compound flex evaluation"},
+  // CURE & RHEOLOGY
+  {id:"C01",category:"CURE",name:"MDR Cure Rheometry",
+   standards:["ASTM D5289","ISO 6502-3"],
+   description:"Moving Die Rheometer. Full cure curve: ML, MH, ts1, ts2, T90, T95. Temperature options 150–180°C. Three replicates standard.",
+   applicable_materials:["NR","SBR","BR","EPDM","NBR","COMP"],
+   sample_req:"Uncured compound — 8–10g per replicate, minimum 30g total",
+   turnaround:"2–3 days",express:true,
+   deliverable:"Full cure curve overlay, kinetic parameters, T90/T95 report",
+   typical_use:"Formulation development, cure system optimisation, process setup"},
+  {id:"C02",category:"CURE",name:"Mooney Viscosity",
+   standards:["ASTM D1646","ISO 289-1"],
+   description:"Large rotor (ML 1+4) at 100°C standard. Custom temperatures available. Mooney scorch (ts5) at 125°C.",
+   applicable_materials:["NR","SBR","BR","EPDM","NBR","COMP"],
+   sample_req:"Uncured compound — 25–30g per test",
+   turnaround:"1–2 days",express:true,
+   deliverable:"Mooney viscosity value, scorch curve, ts5 time",
+   typical_use:"Processability assessment, batch-to-batch QC, incoming material control"},
+  {id:"C03",category:"CURE",name:"Thermocouple Curing Analysis",
+   standards:["Internal — Arrhenius CEQ/CEF Method"],
+   description:"Multi-position thermocouple mapping during press cure cycle. Calculates CEQ and CEF% per Arrhenius kinetics. Identifies under- and over-cure zones.",
+   applicable_materials:["COMP"],
+   sample_req:"On-press service — requires mould access. Contact to schedule.",
+   turnaround:"On-site + 3 days analysis",express:false,
+   deliverable:"Position-by-position CEF%, temperature curves, cure quality report",
+   typical_use:"Press validation, new mould qualification, cure cycle optimisation"},
+  {id:"C04",category:"CURE",name:"Cure Activation Energy (Ea)",
+   standards:["ASTM D5289 (multi-temp)","Arrhenius Method"],
+   description:"MDR at 4 temperatures. Arrhenius regression for activation energy (Ea) and pre-exponential factor. Enables CRI and CEQ calculation.",
+   applicable_materials:["NR","SBR","BR","COMP","EPDM"],
+   sample_req:"Uncured compound — 80g minimum (4-temperature series)",
+   turnaround:"4–5 days",express:false,
+   deliverable:"Ea (kJ/mol), regression plot, CRI function for compound family",
+   typical_use:"TC analysis setup, cure model building, production optimisation"},
+  {id:"C05",category:"CURE",name:"Scorch Safety Assessment",
+   standards:["ASTM D1646","ISO 289-2"],
+   description:"Combined Mooney scorch and MDR analysis to map full safety window from processing minimum to cure onset. Risk-rated output.",
+   applicable_materials:["NR","SBR","COMP","BR","EPDM"],
+   sample_req:"Uncured compound — 50g",
+   turnaround:"2–3 days",express:true,
+   deliverable:"Scorch safety window chart, risk table (low/med/high)",
+   typical_use:"Mixer and extruder process settings, seasonal compound adjustment"},
+  // AGING
+  {id:"A01",category:"AGING",name:"Heat Aging",
+   standards:["ASTM D573","ISO 188"],
+   description:"Air oven aging at controlled temperature. Tensile, hardness, elongation measured before and after. Reports % change per property.",
+   applicable_materials:["NR","SBR","EPDM","NBR","COMP","SIL"],
+   sample_req:"Same specimens as tensile/hardness + 30% extra for aging series",
+   turnaround:"7–10 days (aging + testing)",express:false,
+   deliverable:"Before/after property table, % retained values, acceptance verdict",
+   typical_use:"Service life prediction, stabiliser evaluation, OE compound approval"},
+  {id:"A02",category:"AGING",name:"Ozone Resistance",
+   standards:["ISO 1431-1","ASTM D1149"],
+   description:"Static strain exposure in ozone chamber at 40°C, 50 pphm, 72h standard. Dynamic option available. Rated by crack severity 0–4 scale.",
+   applicable_materials:["NR","SBR","BR","COMP"],
+   sample_req:"10 × dumbbell specimens at 20% elongation in jig",
+   turnaround:"5–7 days",express:false,
+   deliverable:"Crack severity rating per specimen, photographic record, pass/fail",
+   typical_use:"Sidewall compound OE certification, exterior rubber qualification"},
+  {id:"A03",category:"AGING",name:"Fluid Immersion (Fuel / Oil / Coolant)",
+   standards:["ASTM D471","ISO 1817"],
+   description:"Immersion in ASTM Reference Fuel C, IRM 901/902/903 oils, water/coolant. Volume change, mass change, and property retention measured.",
+   applicable_materials:["NBR","EPDM","NR","COMP","SIL"],
+   sample_req:"5 × specimens per fluid type + property test specimens",
+   turnaround:"5–10 days (immersion duration dependent)",express:false,
+   deliverable:"Volume swell %, mass change %, retained properties after immersion",
+   typical_use:"Seal and gasket compound selection, automotive fluid compatibility"},
+  {id:"A04",category:"AGING",name:"Low Temperature Brittleness",
+   standards:["ASTM D746","ISO 812"],
+   description:"Impact brittleness temperature test. Identifies lowest temperature at which specimen does not fracture. Reports Tb (brittleness temperature).",
+   applicable_materials:["NR","BR","SBR","COMP","EPDM","TPE"],
+   sample_req:"10 × strip specimens 25mm × 6mm × 2mm",
+   turnaround:"2–3 days",express:true,
+   deliverable:"Brittle temperature Tb, specimen-by-specimen pass/fail record",
+   typical_use:"Winter compound evaluation, cold climate product qualification"},
+  {id:"A05",category:"AGING",name:"Weather Resistance (UV + Humidity Cycling)",
+   standards:["ISO 4892-3","ASTM G154"],
+   description:"UV-A fluorescent lamp + condensation cycling. 1000h standard exposure. Surface evaluated for cracking, chalking, colour change.",
+   applicable_materials:["EPDM","SIL","TPE","COMP"],
+   sample_req:"Flat plaques 75×150×2mm — 6 specimens",
+   turnaround:"25–30 days (test duration)",express:false,
+   deliverable:"Visual rating, gloss change, colour delta E, cracking assessment",
+   typical_use:"Exterior component qualification, warranty support"},
+  // CHEMICAL
+  {id:"CH01",category:"CHEM",name:"Carbon Black Content (TGA)",
+   standards:["ASTM D1603","ASTM E1131","ISO 9924-1"],
+   description:"Thermogravimetric analysis via Netzsch STA 449. Measures polymer, carbon black, ash, and volatile content by sequential thermal decomposition. Accurate to ±0.5% by weight.",
+   applicable_materials:["NR","SBR","BR","COMP","EPDM"],
+   sample_req:"5–10g cured or uncured compound",
+   turnaround:"2–3 days",express:true,
+   deliverable:"TGA thermogram, component % table (polymer / CB / ash / volatiles)",
+   typical_use:"Incoming compound verification, competitor reverse-engineering, QC"},
+  {id:"CH02",category:"CHEM",name:"FTIR Polymer Identification",
+   standards:["ASTM E1252","ISO 21991"],
+   description:"ATR-FTIR spectroscopy for polymer type identification. Library matching against 10,000+ rubber spectra. Identifies primary polymer and blend components.",
+   applicable_materials:["NR","SBR","BR","EPDM","NBR","TPE","SIL","COMP"],
+   sample_req:"1–5g cured or uncured sample — any form",
+   turnaround:"1–2 days",express:true,
+   deliverable:"Spectrum overlay, match report, polymer identification confidence %",
+   typical_use:"Unknown compound identification, supplier verification, failure analysis"},
+  {id:"CH03",category:"CHEM",name:"Ash Content",
+   standards:["ASTM D5667","ISO 247-1"],
+   description:"Gravimetric determination of inorganic filler content (ZnO, silica, calcium carbonate, etc.) by controlled combustion at 550°C.",
+   applicable_materials:["NR","SBR","COMP","EPDM"],
+   sample_req:"2–5g of compound per replicate, triplicate standard",
+   turnaround:"2–3 days",express:true,
+   deliverable:"% ash by weight, triplicate mean, comparison to specification",
+   typical_use:"Activator and filler content verification, compound audit"},
+  {id:"CH04",category:"CHEM",name:"Sulfur Content (OES/XRF)",
+   standards:["ASTM D4239","ISO 11885"],
+   description:"Optical Emission Spectrometry or X-ray Fluorescence for total sulfur quantification. Reports ppm and wt%. Also quantifies Zinc, Calcium, Silicon simultaneously.",
+   applicable_materials:["NR","SBR","COMP","BR"],
+   sample_req:"3–5g compound per replicate",
+   turnaround:"2–3 days",express:true,
+   deliverable:"Elemental content table (S, Zn, Ca, Si), method uncertainty",
+   typical_use:"Curative system verification, cross-link density estimation"},
+  // DYNAMIC
+  {id:"D01",category:"DYN",name:"DMA — Temperature Sweep",
+   standards:["ISO 4664-1","ASTM D5992"],
+   description:"Dynamic Mechanical Analysis on Netzsch Gabo DMA 242 from -80°C to +100°C at 10 Hz. Reports E', E'', tan delta across temperature range. Tg from tan delta peak.",
+   applicable_materials:["NR","SBR","BR","COMP","TPE","EPDM"],
+   sample_req:"Rectangular specimen 40×10×2–4mm — 3 replicates",
+   turnaround:"3–5 days",express:true,
+   deliverable:"E', E'', tan delta vs temperature plots, Tg report, numerical data table",
+   typical_use:"OEM tyre homologation, wet grip (tan δ @ 0°C) and rolling resistance (tan δ @ 60°C) screening"},
+  {id:"D02",category:"DYN",name:"DMA — Frequency Sweep",
+   standards:["ISO 4664-1","ASTM D5992"],
+   description:"Dynamic properties at constant temperature across 0.1–100 Hz on Netzsch Gabo DMA 242. Master curve construction using time-temperature superposition available.",
+   applicable_materials:["NR","SBR","BR","COMP","TPE"],
+   sample_req:"Rectangular specimen 40×10×2–4mm — 3 replicates",
+   turnaround:"3–5 days",express:false,
+   deliverable:"Frequency-dependent E', tan delta plots, master curve if requested",
+   typical_use:"Tyre performance modelling, vibration damping compound design"},
+  {id:"D03",category:"DYN",name:"Payne Effect — RPA Strain Sweep",
+   standards:["Internal / ASTM D6204"],
+   description:"Rubber Process Analyser strain sweep at 1 Hz, 60°C on D-RPA 3000. Quantifies Payne effect (G'high vs G'low) as filler network strength indicator. Critical for silica compound optimisation.",
+   applicable_materials:["NR","SBR","COMP"],
+   sample_req:"Uncured compound — 8g per replicate, 3 replicates",
+   turnaround:"2–3 days",express:true,
+   deliverable:"G' vs strain amplitude curve, Payne effect delta G', dispersion assessment",
+   typical_use:"Silica coupling efficiency verification, mixing quality control"},
+];
+
+const FINDER_TREE = {
+  "NR:mechanical":["M01","M02","M03","M05","M06","M07"],
+  "NR:cure":["C01","C02","C04","C05"],
+  "NR:aging":["A01","A02","A03","A04"],
+  "NR:chemical":["CH01","CH02","CH03","CH04"],
+  "NR:dynamic":["D01","D02","D03"],
+  "SBR:mechanical":["M01","M02","M03","M05","M06","M07"],
+  "SBR:cure":["C01","C02","C04","C05"],
+  "SBR:chemical":["CH01","CH02","CH04"],
+  "SBR:dynamic":["D01","D02","D03"],
+  "COMP:mechanical":["M01","M02","M03","M04","M05","M06","M07"],
+  "COMP:cure":["C01","C02","C03","C04","C05"],
+  "COMP:aging":["A01","A02","A03","A04"],
+  "COMP:chemical":["CH01","CH02","CH03","CH04"],
+  "COMP:dynamic":["D01","D02","D03"],
+  "EPDM:mechanical":["M01","M02","M04","M06"],
+  "EPDM:aging":["A01","A02","A05"],
+  "EPDM:chemical":["CH01","CH02"],
+  "NBR:mechanical":["M01","M02","M04"],
+  "NBR:aging":["A01","A03"],
+  "NBR:chemical":["CH02","CH03"],
+  "SIL:mechanical":["M01","M02","M04"],
+  "SIL:aging":["A01","A03","A05"],
+  "SIL:chemical":["CH02"],
+  "BR:mechanical":["M01","M02","M05","M06","M07"],
+  "BR:cure":["C01","C02","C04"],
+  "BR:chemical":["CH01","CH02"],
+  "BR:dynamic":["D01","D02"],
+  "TPE:mechanical":["M01","M02","M04","M06"],
+  "TPE:aging":["A04","A05"],
+  "TPE:dynamic":["D01"],
+};
+
+const QUICK_PROMPTS = {
+  'section-finder':[
+    "What sample do I need for tensile testing?",
+    "Turnaround for MDR rheometry?",
+    "Do you test to ISO 6502?",
+    "What is the LAT100 used for?",
+  ],
+  'section-catalog':[
+    "What tests for OEM tyre qualification?",
+    "Explain the Payne effect test",
+    "What does CEF% mean in curing analysis?",
+    "Which tests use the Netzsch Gabo DMA?",
+  ],
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+const fState = {material:null, testType:null, results:[]};
+window.finderState = fState;
+window.catalogFilter = 'ALL';
+window.lastExpandedSvc = null;
+let donutChart = null;
+let chatOpen = false;
+
+// ── UTILS ─────────────────────────────────────────────────────────────────
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const getCat = id => CATEGORIES.find(c=>c.id===id)||{};
+const now = () => new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+// ── BUILD SERVICE CARD ────────────────────────────────────────────────────
+function buildCard(svc, ctx='cat') {
+  const cat = getCat(svc.category);
+  const oeFlag = OE_FLAG[svc.id];
+  const equip = EQUIPMENT[svc.id]||'';
+  const uid = `s-${svc.id}-${ctx}`;
+  const oeBadge = oeFlag
+    ? `<span class="oe-badge ${oeFlag==='OE Critical'?'blocker':'req'}" title="${oeFlag==='OE Critical'?'OE-Critical: mandatory for OE homologation — a failed result blocks OE approval. We perform this test.':'Required for OE qualification — we perform this test.'}">${oeFlag==='OE Critical'?'★ OE CRITICAL':'✓ OE REQ'}</span>`
+    : '';
+  const expBadge = svc.express
+    ? `<span class="express-badge"><i data-lucide="zap"></i>EXPRESS</span>`
+    : `<span class="std-badge">STD</span>`;
+  const stdChips = svc.standards.map(s=>`<span class="std-chip">${esc(s)}</span>`).join('');
+  const matChips = svc.applicable_materials.map(m=>`<span class="mat-chip-sm">${m}</span>`).join('');
+
+  return `
+<div class="svc-card" id="${uid}">
+  <div class="svc-card-top">
+    <div class="svc-card-meta">
+      <span class="cat-chip" style="background:${cat.color}1A;color:${cat.color};border:1px solid ${cat.color}44">
+        <i data-lucide="${cat.icon}" style="width:11px;height:11px"></i>${cat.label}
+      </span>
+      <span class="svc-id">${svc.id}</span>
+      ${oeBadge}
+    </div>
+    ${expBadge}
+  </div>
+  <div class="svc-name">${esc(svc.name)}</div>
+  <div class="svc-desc">${esc(svc.description.substring(0,svc.description.indexOf('.')+1)||svc.description)}</div>
+  <div class="svc-standards"><span class="std-label">Standards:</span>${stdChips}</div>
+  ${equip?`<div class="svc-equip"><span class="equip-label">Instrument:</span><span class="equip-val">${esc(equip)}</span></div>`:''}
+  <button class="svc-expand-btn" onclick="toggleDetail('${uid}-det',this)">
+    <i data-lucide="chevron-down"></i><span>More details</span>
+  </button>
+  <div class="svc-details" id="${uid}-det">
+    <div class="detail-block">
+      <div class="detail-label">Full Description</div>
+      <div class="detail-text">${esc(svc.description)}</div>
+    </div>
+    <div class="detail-block">
+      <div class="detail-label">Sample Requirements</div>
+      <div class="detail-text">${esc(svc.sample_req)}</div>
+    </div>
+    <div class="detail-block">
+      <div class="detail-label">Deliverable</div>
+      <div class="detail-text">${esc(svc.deliverable)}</div>
+    </div>
+    <div class="detail-block">
+      <div class="detail-label">Typical Use</div>
+      <div class="detail-text detail-italic">${esc(svc.typical_use)}</div>
+    </div>
+    <div class="detail-block">
+      <div class="detail-label">Applicable Materials</div>
+      <div class="mat-chips">${matChips}</div>
+    </div>
+  </div>
+  <div class="svc-footer">
+    <span class="ta-badge"><i data-lucide="clock"></i>${esc(svc.turnaround)}</span>
+    <button class="btn btn-cyan btn-sm" onclick="openModal('${esc(svc.name)}')">
+      <i data-lucide="send"></i>Submit Requirements
+    </button>
+  </div>
+</div>`;
+}
+
+function toggleDetail(detId, btn) {
+  const det = document.getElementById(detId);
+  if(!det) return;
+  const open = det.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  const sp = btn.querySelector('span');
+  if(sp) sp.textContent = open ? 'Less details' : 'More details';
+  if(open){
+    const id = detId.split('-')[1];
+    window.lastExpandedSvc = SERVICES.find(s=>s.id===id)||null;
+    updateCtx();
+  }
+  lucide.createIcons();
+}
+
+// ── SECTION SWITCH ────────────────────────────────────────────────────────
+function switchSection(name) {
+  document.querySelectorAll('.app-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`section-${name}`).classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+  updateCtx();
+  renderQP();
+  lucide.createIcons();
+}
+
+// ── FINDER ────────────────────────────────────────────────────────────────
+function initFinder() {
+  document.getElementById('matGrid').innerHTML = MATERIAL_TYPES.map(m=>`
+    <button class="mat-btn" id="mat-${m.id}" onclick="selMat('${m.id}')">
+      <i data-lucide="${m.icon}"></i>
+      <div class="mat-label">${esc(m.label)}</div>
+      <div class="mat-check">✓</div>
+    </button>`).join('');
+  lucide.createIcons();
+}
+
+function selMat(id) {
+  fState.material=id; fState.testType=null; fState.results=[];
+  document.querySelectorAll('.mat-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`mat-${id}`).classList.add('selected');
+  updateStepUI(1);
+  renderTestGrid(id);
+  const s2 = document.getElementById('step2');
+  s2.style.display='block'; s2.className='step-card';
+  document.getElementById('step3').style.display='none';
+  lucide.createIcons(); updateCtx();
+}
+
+function renderTestGrid(matId) {
+  document.getElementById('testGrid').innerHTML = TEST_TYPES.map(t=>{
+    const key = `${matId}:${t.id}`;
+    const cnt = (FINDER_TREE[key]||[]).length;
+    const dis = cnt===0 ? 'style="opacity:.35;pointer-events:none"' : '';
+    return `<button class="test-btn" id="test-${t.id}" ${dis}
+      style="border-color:${t.color}33" onclick="selTest('${t.id}')">
+      <i data-lucide="${t.icon}" style="color:${t.color}"></i>
+      <div class="test-label">${esc(t.label)}</div>
+      <div class="test-count">${cnt>0?cnt+' services':'—'}</div>
+    </button>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+function selTest(id) {
+  fState.testType=id;
+  document.querySelectorAll('.test-btn').forEach(b=>{b.classList.remove('selected');b.style.transform='';b.style.background='';});
+  const btn = document.getElementById(`test-${id}`);
+  const t = TEST_TYPES.find(t=>t.id===id);
+  if(btn&&t){btn.classList.add('selected');btn.style.background=`${t.color}18`;}
+  updateStepUI(2);
+  const key=`${fState.material}:${id}`;
+  const ids=FINDER_TREE[key]||[];
+  fState.results=SERVICES.filter(s=>ids.includes(s.id));
+
+  const s3=document.getElementById('step3');
+  const grid=document.getElementById('resultsGrid');
+  document.getElementById('resultsCount').textContent=ids.length;
+  if(ids.length===0){
+    grid.innerHTML=`<div class="no-match"><strong>No standard services for this combination</strong>
+      <p>Submit your requirements and we'll scope a custom testing program for your specific needs.</p></div>`;
+  } else {
+    const allExp=fState.results.every(s=>s.express);
+    document.getElementById('taText').textContent = allExp?'Express: 2–3 days available':'Standard: up to 7 business days';
+    grid.innerHTML=fState.results.map(s=>buildCard(s,'finder')).join('');
+  }
+  s3.style.display='block'; lucide.createIcons(); updateCtx();
+}
+
+function updateStepUI(done) {
+  // done = last completed step (1 or 2)
+  ['1','2','3'].forEach(n=>{
+    const c=document.getElementById(`sc${n}`);
+    const l=document.getElementById(`sl${n}`);
+    const ni=parseInt(n);
+    if(ni<done+1){c.classList.add('done');c.classList.remove('active');l.className='step-label done';}
+    else if(ni===done+1){c.classList.add('active');c.classList.remove('done');l.className='step-label active';}
+    else{c.className='step-circle';l.className='step-label';}
+  });
+  const conn1=document.getElementById('conn1');
+  const conn2=document.getElementById('conn2');
+  if(done>=1)conn1.classList.add('done');
+  if(done>=2)conn2.classList.add('done');
+}
+
+function resetFinder() {
+  fState.material=null; fState.testType=null; fState.results=[];
+  document.querySelectorAll('.mat-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.test-btn').forEach(b=>{b.classList.remove('selected');b.style.background='';});
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step3').style.display='none';
+  ['1','2','3'].forEach(n=>{
+    document.getElementById(`sc${n}`).className='step-circle'+(n==='1'?' active':'');
+    document.getElementById(`sl${n}`).className='step-label'+(n==='1'?' active':'');
+  });
+  document.getElementById('conn1').classList.remove('done');
+  document.getElementById('conn2').classList.remove('done');
+  updateCtx();
+}
+
+// ── CATALOG ───────────────────────────────────────────────────────────────
+function initCatalog() {
+  const pills=document.getElementById('filterPills');
+  pills.innerHTML=['ALL',...CATEGORIES.map(c=>c.id)].map(id=>{
+    const cat=CATEGORIES.find(c=>c.id===id);
+    const label=id==='ALL'?'All':cat.label;
+    return `<button class="fpill ${id==='ALL'?'active':''}" data-filter="${id}" onclick="setCatFilter('${id}')">${esc(label)}</button>`;
+  }).join('');
+  renderCatalog();
+  initDonut();
+}
+
+function setCatFilter(id) {
+  window.catalogFilter=id;
+  document.querySelectorAll('.fpill').forEach(p=>p.classList.toggle('active',p.dataset.filter===id));
+  renderCatalog();
+  updateCtx();
+}
+
+function filterCatalog(){renderCatalog();}
+
+function renderCatalog() {
+  const q=(document.getElementById('catalogSearch')?.value||'').toLowerCase();
+  const cf=window.catalogFilter;
+  const list=SERVICES.filter(s=>{
+    const catOk=cf==='ALL'||s.category===cf;
+    const searchOk=!q||s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q)||
+      s.standards.some(st=>st.toLowerCase().includes(q))||s.description.toLowerCase().includes(q);
+    return catOk&&searchOk;
+  });
+  document.getElementById('catCount').textContent=list.length;
+  const grid=document.getElementById('catalogGrid');
+  if(list.length===0){
+    grid.innerHTML=`<div class="empty-state">
+      <strong>No services match</strong>
+      Try a different search term or <button class="btn btn-ghost btn-sm" onclick="document.getElementById('catalogSearch').value='';filterCatalog()">clear search</button>
+    </div>`;
+  } else {
+    grid.innerHTML=list.map(s=>buildCard(s,'cat')).join('');
+  }
+  lucide.createIcons();
+}
+
+// ── DONUT ─────────────────────────────────────────────────────────────────
+function initDonut() {
+  const ctx=document.getElementById('donutChart');
+  if(!ctx||typeof Chart==='undefined') return;
+  const counts=CATEGORIES.map(c=>SERVICES.filter(s=>s.category===c.id).length);
+  donutChart=new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:CATEGORIES.map(c=>c.label),
+      datasets:[{
+        data:counts,
+        backgroundColor:CATEGORIES.map(c=>c.color+'BB'),
+        borderColor:CATEGORIES.map(c=>c.color),
+        borderWidth:2,hoverOffset:8,
+      }]
+    },
+    options:{
+      responsive:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed} services`}}},
+      onClick:(evt,els)=>{if(els.length>0)setCatFilter(CATEGORIES[els[0].index].id);}
+    }
+  });
+  const leg=document.getElementById('donutLegend');
+  CATEGORIES.forEach((c,i)=>{
+    const row=document.createElement('div');
+    row.className='legend-row';
+    row.innerHTML=`<span class="legend-dot" style="background:${c.color}"></span>${c.label} <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;color:var(--cyan)">${counts[i]}</span>`;
+    row.onclick=()=>setCatFilter(c.id);
+    leg.appendChild(row);
+  });
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function openModal(svc=''){
+  document.getElementById('f-services').value=svc?`${svc}:\n`:'';
+  document.getElementById('formMsg').className='form-msg';
+  document.querySelectorAll('.finput,.fselect,.ftextarea').forEach(el=>el.classList.remove('err'));
+  document.getElementById('inquiryModal').classList.add('open');
+}
+function closeModal(){document.getElementById('inquiryModal').classList.remove('open');}
+function handleOverlayClick(e){if(e.target===document.getElementById('inquiryModal'))closeModal();}
+
+async function submitInquiry(){
+  const req=[
+    {id:'f-name'},{id:'f-company'},{id:'f-email',type:'email'},
+    {id:'f-material'},{id:'f-services'},{id:'f-qty'},{id:'f-turnaround'},
+  ];
+  let ok=true;
+  req.forEach(f=>{
+    const el=document.getElementById(f.id);
+    if(!el.value.trim()){el.classList.add('err');ok=false;}
+    else el.classList.remove('err');
+  });
+  const em=document.getElementById('f-email');
+  if(em.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)){em.classList.add('err');ok=false;}
+  if(!ok) return;
+
+  const payload={
+    fullName:document.getElementById('f-name').value,
+    companyName:document.getElementById('f-company').value,
+    email:document.getElementById('f-email').value,
+    phone:document.getElementById('f-phone').value,
+    materialType:document.getElementById('f-material').value,
+    serviceRequested:document.getElementById('f-services').value,
+    standard:document.getElementById('f-standard').value,
+    sampleQty:document.getElementById('f-qty').value,
+    turnaround:document.getElementById('f-turnaround').value,
+    notes:document.getElementById('f-notes').value,
+    source:'Rubber Services Intelligence Demo',
+    timestamp:new Date().toISOString(),
+  };
+
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.innerHTML='<i data-lucide="loader-2" style="width:15px;height:15px;animation:spin .8s linear infinite"></i> Submitting…';
+  lucide.createIcons();
+
+  const msg=document.getElementById('formMsg');
+  try{
+    await fetch(N8N_INQUIRY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    msg.className='form-msg ok';
+    msg.innerHTML='<i data-lucide="check-circle-2"></i> Requirements received — we will respond within 1 business day with a detailed testing scope.';
+    lucide.createIcons();
+    setTimeout(()=>closeModal(),3200);
+  }catch(e){
+    msg.className='form-msg fail';
+    msg.innerHTML='<i data-lucide="x-circle"></i> Submission failed — please email us directly at testing@rubberspec-demo.com';
+    lucide.createIcons();
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<i data-lucide="send"></i>Submit Requirements';
+    lucide.createIcons();
+  }
+}
+
+// ── CHATBOT ───────────────────────────────────────────────────────────────
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open',chatOpen);
+  document.getElementById('chatTrigger').classList.toggle('open',chatOpen);
+  document.getElementById('chatNotif').classList.remove('show');
+  if(chatOpen){document.getElementById('chatPulse').style.display='none';}
+}
+
+function buildCtx(){
+  const sec=document.querySelector('.app-section.active')?.id;
+  const ctx={section:sec};
+  if(sec==='section-finder'){
+    ctx.material=fState.material;ctx.testType=fState.testType;
+    ctx.results=fState.results.length;
+    ctx.serviceIds=fState.results.map(s=>s.id).join(', ');
+  }
+  if(sec==='section-catalog'){
+    ctx.filter=window.catalogFilter;
+    ctx.search=document.getElementById('catalogSearch')?.value||'';
+  }
+  if(window.lastExpandedSvc){
+    ctx.viewing=window.lastExpandedSvc.name;
+    ctx.viewingStandards=window.lastExpandedSvc.standards.join(', ');
+    ctx.viewingEquipment=EQUIPMENT[window.lastExpandedSvc.id]||'';
+  }
+  return ctx;
+}
+
+function updateCtx(){
+  const ctx=buildCtx();
+  const badge=document.getElementById('chatCtx');
+  if(!badge) return;
+  const sec=ctx.section==='section-finder'?'Finder':'Catalog';
+  const extra=ctx.material&&ctx.testType?` · ${ctx.material}/${ctx.testType}`:ctx.filter&&ctx.filter!=='ALL'?` · ${ctx.filter}`:'';
+  badge.textContent=sec+extra;
+}
+
+function appendMsg(role,text){
+  const c=document.getElementById('chatMsgs');
+  const d=document.createElement('div');
+  d.className=`cmsg ${role}`;
+  d.innerHTML=`<div class="cbubble">${esc(text).replace(/\n/g,'<br>')}</div><div class="ctime">${now()}</div>`;
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
+}
+function showTyping(){document.getElementById('typingDots').classList.add('show');document.getElementById('chatMsgs').scrollTop=99999;}
+function hideTyping(){document.getElementById('typingDots').classList.remove('show');}
+function showChatErr(m){const el=document.getElementById('chatErr');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000);}
+
+async function sendChatMsg(msg){
+  const payload={
+    message:msg,context:JSON.stringify(buildCtx()),
+    product:'services',
+    catalog_summary:'24 rubber testing services: mechanical, cure/rheology, aging, chemical, dynamic. Equipment: MDR 3000, Rheocheck MD, MV 3000, Zwick Z10, Netzsch Gabo DMA 242, D-RPA 3000, ABR 3000, FT 3000 De Mattia, HT 3000, Netzsch STA 449. OE qualification: 20/22 requirements covered.',
+  };
+  try{
+    showTyping();
+    const res=await fetch(N8N_CHATBOT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    hideTyping();
+    appendMsg('bot',data.reply||'Sorry, I could not process that.');
+  }catch(e){hideTyping();showChatErr('Connection error — please try again.');}
+}
+
+function sendChat(){
+  const inp=document.getElementById('chatInput');
+  const msg=inp.value.trim();
+  if(!msg) return;
+  inp.value='';inp.style.height='auto';
+  appendMsg('user',msg);
+  sendChatMsg(msg);
+}
+function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+
+function renderQP(){
+  const el=document.getElementById('chatQP');
+  if(!el) return;
+  const sec=document.querySelector('.app-section.active')?.id||'section-finder';
+  const qps=QUICK_PROMPTS[sec]||[];
+  el.innerHTML=qps.map(p=>`<button class="qp" onclick="useQP(this.textContent.trim())">${esc(p)}</button>`).join('');
+}
+function useQP(t){document.getElementById('chatInput').value=t;sendChat();}
+
+// ── WELCOME + RESET CONVERSATION ──────────────────────────────────────────
+const WELCOME_MSG = "Hello — I'm your rubber testing technical advisor.\n\nI can answer questions about test methods, sample requirements, turnaround times, equipment platforms (MDR 3000, Netzsch Gabo DMA, LAT100, and more), and OE qualification requirements.\n\nWhat compound or material are you working with?";
+function loadWelcome(){ appendMsg('bot', WELCOME_MSG); }
+function resetConversation(){
+  const c=document.getElementById('chatMsgs');
+  c.querySelectorAll('.cmsg').forEach(el=>el.remove());
+  document.getElementById('chatErr').classList.remove('show');
+  hideTyping();
+  window.lastExpandedSvc=null;
+  loadWelcome();
+  updateCtx();
+}
+
+// ── AUTO-RESIZE TEXTAREA ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  try{ lucide.createIcons(); }catch(e){}
+  initFinder();
+  initCatalog();
+  renderQP();
+  updateCtx();
+
+  // Pre-load welcome message immediately — panel is never empty on open
+  loadWelcome();
+  try{ lucide.createIcons(); }catch(e){}
+
+  // Notification nudge after 8 seconds (only if chat still closed)
+  setTimeout(()=>{ if(!chatOpen) document.getElementById('chatNotif').classList.add('show'); },8000);
+
+  // Auto-resize chat input
+  const ci=document.getElementById('chatInput');
+  ci.addEventListener('input',()=>{ci.style.height='auto';ci.style.height=Math.min(ci.scrollHeight,90)+'px';});
+});
+</script>
+</body>
+</html>

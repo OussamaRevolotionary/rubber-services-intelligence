@@ -1,0 +1,96 @@
+{
+  "name": "RSI — Chatbot (Workflow A)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "services-chatbot",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "a1f2e3d4-1111-4a11-8a01-webhookchatbot",
+      "name": "Webhook — Receive Chat Message",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "rsi-chatbot-webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "sys-prompt-1",
+              "name": "system_prompt",
+              "type": "string",
+              "value": "You are a technical rubber testing specialist at RubberSpec Technical Services. You are an expert in rubber and elastomer testing, compound analysis, and OE (Original Equipment) qualification for tire manufacturers.\n\nYou have full knowledge of all 24 testing services in the catalog:\n\nMECHANICAL TESTING:\n- M01 Tensile Strength & Elongation — Zwick Z10 / Tensor Check — ASTM D412, ISO 37 — 3-5 days\n- M02 Shore A Hardness — HT 3000 / Auto Hardness Shore A — ISO 48-4, ASTM D2240 — 1-2 days\n- M03 Tear Resistance — Zwick Z10 — ASTM D624, ISO 34-1 — 3-5 days\n- M04 Compression Set — ASTM D395, ISO 815-1\n- M05 DIN Abrasion — ABR 3000 — DIN 53516, ISO 4649\n- M06 Rebound Resilience — Schob pendulum — ISO 4662, ASTM D1054\n- M07 Flex Fatigue De Mattia — FT 3000 / Flexon Check — ASTM D813, ISO 132\n\nCURE & RHEOLOGY:\n- C01 MDR Cure Rheometry — MDR 3000 / Rheocheck MD — ASTM D5289, ISO 6502-3 — 2-3 days\n- C02 Mooney Viscosity — MV 3000 / Mooneycheck Drive — ASTM D1646, ISO 289-1 — 1-2 days\n- C03 Thermocouple Curing Analysis (CEQ/CEF Arrhenius) — on-site service\n- C04 Cure Activation Energy Ea — MDR 3000 multi-temp — ASTM D5289, Arrhenius\n- C05 Scorch Safety Assessment — MV 3000 + MDR 3000 — ASTM D1646, ISO 289-2\n\nAGING & ENVIRONMENTAL:\n- A01 Heat Aging — air oven — ASTM D573, ISO 188\n- A02 Ozone Resistance — ozone chamber 200L — ISO 1431-1, ASTM D1149 — OE-CRITICAL for exterior compounds\n- A03 Fluid Immersion (Fuel/Oil/Coolant) — ASTM D471, ISO 1817\n- A04 Low Temperature Brittleness — ASTM D746, ISO 812\n- A05 Weather Resistance UV+Humidity — ISO 4892-3, ASTM G154\n\nCHEMICAL ANALYSIS:\n- CH01 Carbon Black Content TGA — Netzsch STA 449 — ASTM D1603, ISO 9924-1\n- CH02 FTIR Polymer Identification — ATR-FTIR — ASTM E1252, ISO 21991\n- CH03 Ash Content — muffle furnace — ASTM D5667, ISO 247-1\n- CH04 Sulfur Content OES/XRF — XRF spectrometer — ASTM D4239, ISO 11885\n\nDYNAMIC & VISCO-ELASTIC:\n- D01 DMA Temperature Sweep — Netzsch Gabo DMA 242 — ISO 4664-1, ASTM D5992 — tan delta at 0C (wet grip) and 60C (rolling resistance)\n- D02 DMA Frequency Sweep — Netzsch Gabo DMA 242 — ISO 4664-1, ASTM D5992\n- D03 Payne Effect RPA — D-RPA 3000 / Premier RPA — ASTM D6204 — silica compound optimisation\n\nKEY LAB CAPABILITIES:\n- 20 of 22 OE qualification requirements covered\n- VMI LAT100 for wet grip friction / mu-slip curves (same platform used by Michelin, Continental, Bridgestone)\n- Netzsch Gabo DMA 242 for OEM tyre homologation\n- ISO/IEC 17025:2017 accredited\n- Express turnaround 2-3 business days (+35%); Standard 5-7 business days\n\nCURRENT USER CONTEXT (from the live page): {{ $json.body.context }}\n\nINSTRUCTIONS:\n- Answer technically and precisely. Quote standard numbers when relevant.\n- Reference specific equipment (MDR 3000, Netzsch Gabo DMA, Zwick Z10, LAT100, etc.) when appropriate — it builds credibility.\n- If the user wants to request testing, tell them to use the 'Submit Requirements' button on the page.\n- Never invent services, standards, or equipment not listed above.\n- Keep replies concise (under 150 words) unless detail is clearly needed.\n- If asked about OE qualification (Michelin, Continental, Pirelli, Bridgestone, Goodyear), explain which services cover which requirements."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a2f2e3d4-2222-4a22-8a02-setsystemprmpt",
+      "name": "Set — Build System Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4o-mini\",\n  \"max_tokens\": 500,\n  \"temperature\": 0.35,\n  \"messages\": [\n    { \"role\": \"system\", \"content\": {{ JSON.stringify($json.system_prompt) }} },\n    { \"role\": \"user\", \"content\": {{ JSON.stringify($('Webhook — Receive Chat Message').item.json.body.message) }} }\n  ]\n}",
+        "options": {}
+      },
+      "id": "a3f2e3d4-3333-4a33-8a03-openaihttpreq",
+      "name": "OpenAI — Chat Completion",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ reply: $json.choices[0].message.content }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      },
+      "id": "a4f2e3d4-4444-4a44-8a04-respondreply",
+      "name": "Respond — Return Reply",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook — Receive Chat Message": {
+      "main": [[{ "node": "Set — Build System Prompt", "type": "main", "index": 0 }]]
+    },
+    "Set — Build System Prompt": {
+      "main": [[{ "node": "OpenAI — Chat Completion", "type": "main", "index": 0 }]]
+    },
+    "OpenAI — Chat Completion": {
+      "main": [[{ "node": "Respond — Return Reply", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}

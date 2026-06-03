@@ -1,0 +1,139 @@
+{
+  "name": "RSI — Lead Capture (Workflow B)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "services-inquiry",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "b1f2e3d4-1111-4b11-8b01-webhookinquiry",
+      "name": "Webhook — Receive Requirements",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "rsi-inquiry-webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "l1",  "name": "lead_name",     "type": "string", "value": "={{ $json.body.fullName }}" },
+            { "id": "l2",  "name": "lead_company",  "type": "string", "value": "={{ $json.body.companyName }}" },
+            { "id": "l3",  "name": "lead_email",    "type": "string", "value": "={{ $json.body.email }}" },
+            { "id": "l4",  "name": "lead_phone",    "type": "string", "value": "={{ $json.body.phone || '' }}" },
+            { "id": "l5",  "name": "material",      "type": "string", "value": "={{ $json.body.materialType }}" },
+            { "id": "l6",  "name": "requirements",  "type": "string", "value": "={{ $json.body.serviceRequested }}" },
+            { "id": "l7",  "name": "standard",      "type": "string", "value": "={{ $json.body.standard || '' }}" },
+            { "id": "l8",  "name": "sample_qty",    "type": "string", "value": "={{ $json.body.sampleQty }}" },
+            { "id": "l9",  "name": "turnaround",    "type": "string", "value": "={{ $json.body.turnaround }}" },
+            { "id": "l10", "name": "notes",         "type": "string", "value": "={{ $json.body.notes || '' }}" },
+            { "id": "l11", "name": "source",        "type": "string", "value": "={{ $json.body.source || 'Rubber Services Intelligence Demo' }}" },
+            { "id": "l12", "name": "timestamp",     "type": "string", "value": "={{ $now.toISO() }}" },
+            { "id": "l13", "name": "email_subject", "type": "string", "value": "=New Testing Requirements — {{ $json.body.companyName }} ({{ $json.body.materialType }})" },
+            { "id": "l14", "name": "email_body",    "type": "string", "value": "=<h2>New Testing Requirements Received</h2><p><strong>Name:</strong> {{ $json.body.fullName }}<br><strong>Company:</strong> {{ $json.body.companyName }}<br><strong>Email:</strong> {{ $json.body.email }}<br><strong>Phone:</strong> {{ $json.body.phone || 'Not provided' }}</p><hr><p><strong>Material:</strong> {{ $json.body.materialType }}<br><strong>Requirements:</strong><br>{{ $json.body.serviceRequested }}<br><strong>Standard / Spec:</strong> {{ $json.body.standard || 'Not specified' }}<br><strong>Sample Quantity:</strong> {{ $json.body.sampleQty }}<br><strong>Turnaround:</strong> {{ $json.body.turnaround }}</p><hr><p><strong>Additional Context:</strong><br>{{ $json.body.notes || 'None' }}</p><hr><p style='color:#888;font-size:12px'>Source: {{ $json.body.source }} | {{ $now.toISO() }}</p>" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b2f2e3d4-2222-4b22-8b02-formatleaddata",
+      "name": "Set — Format Lead Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp":    "={{ $json.timestamp }}",
+            "name":         "={{ $json.lead_name }}",
+            "company":      "={{ $json.lead_company }}",
+            "email":        "={{ $json.lead_email }}",
+            "phone":        "={{ $json.lead_phone }}",
+            "material":     "={{ $json.material }}",
+            "requirements": "={{ $json.requirements }}",
+            "standard":     "={{ $json.standard }}",
+            "sample_qty":   "={{ $json.sample_qty }}",
+            "turnaround":   "={{ $json.turnaround }}",
+            "notes":        "={{ $json.notes }}",
+            "source":       "={{ $json.source }}"
+          },
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "id": "b3f2e3d4-3333-4b33-8b03-googlesheetsrow",
+      "name": "Google Sheets — Append Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "sendTo": "oussamabdi19@gmail.com",
+        "subject": "={{ $('Set — Format Lead Data').item.json.email_subject }}",
+        "emailType": "html",
+        "message": "={{ $('Set — Format Lead Data').item.json.email_body }}",
+        "options": {
+          "replyTo": "={{ $('Set — Format Lead Data').item.json.lead_email }}"
+        }
+      },
+      "id": "b4f2e3d4-4444-4b44-8b04-gmailnotify",
+      "name": "Gmail — Notify You",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [700, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true, \"message\": \"Requirements received — we will respond within 1 business day with a detailed testing scope and quotation.\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      },
+      "id": "b5f2e3d4-5555-4b55-8b05-respondconfirm",
+      "name": "Respond — Confirm Receipt",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [940, 300]
+    }
+  ],
+  "connections": {
+    "Webhook — Receive Requirements": {
+      "main": [[{ "node": "Set — Format Lead Data", "type": "main", "index": 0 }]]
+    },
+    "Set — Format Lead Data": {
+      "main": [[
+        { "node": "Google Sheets — Append Lead", "type": "main", "index": 0 },
+        { "node": "Gmail — Notify You", "type": "main", "index": 0 }
+      ]]
+    },
+    "Google Sheets — Append Lead": {
+      "main": [[{ "node": "Respond — Confirm Receipt", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}
