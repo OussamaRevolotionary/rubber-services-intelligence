@@ -15,6 +15,10 @@ An interactive demo tool for rubber and tire testing services — by **Oussama L
 
 Single self-contained `index.html` — no build step. Inter + JetBrains Mono, Chart.js, Lucide icons (all via CDN). Deployed on GitHub Pages.
 
+## Sandbox mode
+
+By default the page makes no network calls: the advisor answers from a small built-in rule set and the inquiry form shows "Demo mode — nothing was sent". Append `?live=1` to use the n8n backend. All figures and accreditations are fictional sample data.
+
 ## Backend (N8N)
 
 Two workflows power the chatbot and the inquiry form. Importable JSON and setup instructions are in [`/n8n`](./n8n).

@@ -49,7 +49,7 @@ These paths already match the imported workflows — no copy/paste of webhook UR
    - Create/select a **Google Sheets OAuth2** credential.
    - Paste your **Sheet ID** into *Document ID*.
 4. Open **"Gmail — Notify You"** node:
-   - Create/select a **Gmail OAuth2** credential (account: oussamabdi19@gmail.com).
+   - Create/select a **Gmail OAuth2** credential (account: your-notification-inbox@example.com).
    - (Notification address is already set to your email — change if needed.)
 5. Click **Active**. Done.
 

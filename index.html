@@ -689,6 +689,7 @@ body{
 </header>
 
 <!-- ═══════════════ HERO BAR ══════════════════════════════ -->
+<div style="font:600 .7rem 'JetBrains Mono',monospace;color:#f59e0b;padding:6px 16px;text-align:center;letter-spacing:.04em">SAMPLE LAB — FICTIONAL DATA (demo; figures and accreditation are illustrative)</div>
 <div class="hero-bar">
   <div class="hero-stat">
     <div class="hero-stat-num">24</div>
@@ -933,6 +934,25 @@ body{
 const N8N_BASE_URL    = "https://oussama19.app.n8n.cloud";
 const N8N_CHATBOT_URL = `${N8N_BASE_URL}/webhook/services-chatbot`;
 const N8N_INQUIRY_URL = `${N8N_BASE_URL}/webhook/services-inquiry`;
+
+// ── SANDBOX BY DEFAULT: network calls only with ?live=1 ──
+const LIVE = new URLSearchParams(location.search).get('live') === '1';
+function demoAnswer(q){
+  const t=q.toLowerCase(), w=t.split(/[^a-z0-9]+/).filter(x=>x.length>2);
+  let best=null,bs=0;
+  for(const s of SERVICES){
+    const hay=(s.name+' '+s.id+' '+s.standards.join(' ')+' '+(s.typical_use||'')).toLowerCase();
+    let sc=0; if(t.includes(s.name.toLowerCase())) sc+=5;
+    for(const x of w){ if(hay.includes(x)) sc++; }
+    if(sc>bs){bs=sc;best=s;}
+  }
+  if(best&&bs>=2){
+    return best.name+' ('+best.id+')\nStandards: '+best.standards.join(', ')+'\nSample: '+best.sample_req+'\nTurnaround: '+best.turnaround+(best.express?' (express available)':'')+'\n\n(Demo mode — canned answer from the catalogue, no AI call.)';
+  }
+  if(/turnaround|lead time|how long|days|express/.test(t)) return 'Standard turnaround is 5–7 business days; express is 2–3 business days (+35% surcharge) where marked. Ask about a specific test for its exact time.\n\n(Demo mode — canned answer.)';
+  if(/sample|specimen|size|quantity/.test(t)) return 'Sample requirements are listed on each service card (e.g. dumbbells, sheets, or compound mass). Name a test and I will quote its sample requirement.\n\n(Demo mode — canned answer.)';
+  return 'This is a sandbox demo with a small built-in rule set. Try naming a test (e.g. "tensile", "Shore A hardness", "cure rheometer") to see its standards, sample size and turnaround.\n\n(Demo mode — add ?live=1 for the AI advisor.)';
+}
 
 // ── DATA ──────────────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -1567,6 +1587,7 @@ async function submitInquiry(){
 
   const msg=document.getElementById('formMsg');
   try{
+    if(!LIVE){ msg.className='form-msg ok'; msg.innerHTML='<i data-lucide="check-circle-2"></i> Demo mode — nothing was sent.'; lucide.createIcons(); setTimeout(()=>closeModal(),3000); return; }
     await fetch(N8N_INQUIRY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     msg.className='form-msg ok';
     msg.innerHTML='<i data-lucide="check-circle-2"></i> Requirements received — we will respond within 1 business day with a detailed testing scope.';
@@ -1634,6 +1655,7 @@ function hideTyping(){document.getElementById('typingDots').classList.remove('sh
 function showChatErr(m){const el=document.getElementById('chatErr');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000);}
 
 async function sendChatMsg(msg){
+  if(!LIVE){ setTimeout(()=>appendMsg('bot',demoAnswer(msg)),350); return; }
   const payload={
     message:msg,context:JSON.stringify(buildCtx()),
     product:'services',

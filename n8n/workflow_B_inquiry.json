@@ -86,7 +86,7 @@
     },
     {
       "parameters": {
-        "sendTo": "oussamabdi19@gmail.com",
+        "sendTo": "your-notification-inbox@example.com",
         "subject": "={{ $('Set — Format Lead Data').item.json.email_subject }}",
         "emailType": "html",
         "message": "={{ $('Set — Format Lead Data').item.json.email_body }}",

@@ -469,7 +469,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-
           <h1 class="finder-title">Find the Right Test</h1>
         </div>
         <p class="finder-sub">Select your material and testing need — we show you matching services instantly.</p>
-        <div class="finder-stats">
+        <div style="font:600 .7rem 'JetBrains Mono',monospace;color:#f59e0b;padding:6px 16px;text-align:center;letter-spacing:.04em">SAMPLE LAB — FICTIONAL DATA (demo; figures and accreditation are illustrative)</div>
+<div class="finder-stats">
           <span class="finder-stat">24 Services Available</span>
           <span class="finder-stat">5 Test Categories</span>
           <span class="finder-stat">ISO/IEC 17025 Accredited</span>
@@ -690,6 +691,25 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-
 // ── WEBHOOK URLS (replace PLACEHOLDER with real N8N URLs) ──────────────────
 const N8N_CHATBOT_URL  = "PLACEHOLDER_CHATBOT_WEBHOOK";
 const N8N_INQUIRY_URL  = "PLACEHOLDER_INQUIRY_WEBHOOK";
+
+// ── SANDBOX BY DEFAULT: network calls only with ?live=1 ──
+const LIVE = new URLSearchParams(location.search).get('live') === '1';
+function demoAnswer(q){
+  const t=q.toLowerCase(), w=t.split(/[^a-z0-9]+/).filter(x=>x.length>2);
+  let best=null,bs=0;
+  for(const s of SERVICES){
+    const hay=(s.name+' '+s.id+' '+s.standards.join(' ')+' '+(s.typical_use||'')).toLowerCase();
+    let sc=0; if(t.includes(s.name.toLowerCase())) sc+=5;
+    for(const x of w){ if(hay.includes(x)) sc++; }
+    if(sc>bs){bs=sc;best=s;}
+  }
+  if(best&&bs>=2){
+    return best.name+' ('+best.id+')\nStandards: '+best.standards.join(', ')+'\nSample: '+best.sample_req+'\nTurnaround: '+best.turnaround+(best.express?' (express available)':'')+'\n\n(Demo mode — canned answer from the catalogue, no AI call.)';
+  }
+  if(/turnaround|lead time|how long|days|express/.test(t)) return 'Standard turnaround is 5–7 business days; express is 2–3 business days (+35% surcharge) where marked. Ask about a specific test for its exact time.\n\n(Demo mode — canned answer.)';
+  if(/sample|specimen|size|quantity/.test(t)) return 'Sample requirements are listed on each service card (e.g. dumbbells, sheets, or compound mass). Name a test and I will quote its sample requirement.\n\n(Demo mode — canned answer.)';
+  return 'This is a sandbox demo with a small built-in rule set. Try naming a test (e.g. "tensile", "Shore A hardness", "cure rheometer") to see its standards, sample size and turnaround.\n\n(Demo mode — add ?live=1 for the AI advisor.)';
+}
 
 // ── COMPANY DATA ──────────────────────────────────────────────────────────
 const COMPANY = {
@@ -1376,6 +1396,7 @@ async function submitInquiry() {
   const msg = document.getElementById('formMsg');
 
   try {
+    if(!LIVE){ msg.className='form-msg success'; msg.innerHTML='<i data-lucide="check-circle-2"></i> Demo mode — nothing was sent.'; lucide.createIcons(); setTimeout(()=>closeModal(),3000); return; }
     const res = await fetch(N8N_INQUIRY_URL, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
@@ -1456,6 +1477,7 @@ function showChatError(msg) {
 }
 
 async function sendChatMessage(userMessage) {
+  if(!LIVE){ setTimeout(()=>appendMessage('bot',demoAnswer(userMessage)),350); return; }
   const context = buildContext();
   const payload = {
     message: userMessage,
